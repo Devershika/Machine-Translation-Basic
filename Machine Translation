@@ -13,3 +13,23 @@ from torch.utils.data import Dataset, DataLoader
 from datasets import load_dataset
 
 ds = load_dataset("cfilt/iitb-english-hindi")
+
+def df_splits(dataset,split):
+  df = pd.json_normalize(dataset[split])
+  return df
+
+df_train = df_splits(ds,'train')
+df_test = df_splits(ds,'test')
+df_val = df_splits(ds,'validation')
+
+df = pd.concat([df_train,df_test,df_val])
+df = df[:10000]
+
+df.head()
+
+def tokenize(text):
+  return text.lower().split()
+
+df['en.tokens'] = df['translation.en'].apply(tokenize)
+df['hi.tokens'] = df['translation.hi'].apply(tokenize)
+
