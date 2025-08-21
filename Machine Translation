@@ -47,3 +47,32 @@ eng_vocab = build_vocab(df['en.tokens'])
 hin_vocab = build_vocab(df['hi.tokens'])
 
 len(eng_vocab),len(hin_vocab)
+
+#Create dataset
+class TranslationDataset(Dataset):
+  def __init__(self,dataframe,eng_vocab,hin_vocab):
+    self.data = dataframe
+    self.eng_vocab = eng_vocab
+    self.hin_vocab = hin_vocab
+
+  def __len__(self):
+    return len(self.data)
+
+  def encode_sentence(self,tokens,vocab,eos=True):
+    ids = [vocab.get(token, vocab['<unk>']) for token in tokens]
+    if eos:
+      ids.append(vocab['<eos>'])
+    return ids
+
+  def __getitem__(self,idx):
+    eng_tokens = self.data.iloc[idx]['en.tokens']
+    hin_tokens = self.data.iloc[idx]['hi.tokens']
+    eng_ids = self.encode_sentence(eng_tokens,self.eng_vocab)
+    hin_ids = [self.hin_vocab['<sos>']]+self.encode_sentence(hin_tokens,self.hin_vocab)
+    return torch.tensor(eng_ids),torch.tensor(hin_ids)
+
+def collate_fn(batch):
+  eng_batch,hin_batch = zip(*batch)
+  eng_padded = nn.utils.rnn.pad_sequence(eng_batch,batch_first=True,padding_value=0)
+  hin_padded = nn.utils.rnn.pad_sequence(hin_batch,batch_first=True,padding_value=0)
+  return eng_padded,hin_padded
