@@ -76,3 +76,36 @@ def collate_fn(batch):
   eng_padded = nn.utils.rnn.pad_sequence(eng_batch,batch_first=True,padding_value=0)
   hin_padded = nn.utils.rnn.pad_sequence(hin_batch,batch_first=True,padding_value=0)
   return eng_padded,hin_padded
+
+df = df.sample(frac=1, random_state=2).reset_index(drop=True)
+total = len(df)
+train_end = int(0.9*total)
+val_end = int(0.95*total)
+
+train_loader = DataLoader(TranslationDataset(df.iloc[:train_end], eng_vocab, hin_vocab),
+                          batch_size=4, shuffle=True, collate_fn=collate_fn)
+val_loader = DataLoader(TranslationDataset(df.iloc[train_end:val_end], eng_vocab, hin_vocab),
+                        batch_size=2, shuffle=False, collate_fn=collate_fn)
+test_loader = DataLoader(TranslationDataset(df.iloc[val_end:], eng_vocab, hin_vocab),
+                         batch_size=2, shuffle=False, collate_fn=collate_fn)
+
+#Seq2Seq model
+class Seq2Seq(nn.Module):
+  def __init__(self, input_dim, output_dim, emb_dim=64, hidden_dim=128):
+    super(Seq2Seq, self).__init__()
+    self.encoder_embed = nn.Embedding(input_dim, emb_dim)
+    self.encoder_lstm = nn.LSTM(emb_dim, hidden_dim, batch_first=True)
+
+    self.decoder_embed = nn.Embedding(output_dim, emb_dim)
+    self.decoder_lstm = nn.LSTM(emb_dim, hidden_dim, batch_first=True)
+    self.fc_out = nn.Linear(hidden_dim, output_dim)
+
+
+  def forward(self, src, trg):
+    embedded_src = self.encoder_embed(src)
+    _, (hidden,cell) = self.encoder_lstm(embedded_src)
+
+    embedded_trg = self.decoder_embed(trg[:,:-1])
+    outputs, _ = self.decoder_lstm(embedded_trg, (hidden,cell))
+    predictions = self.fc_out(outputs)
+    return predictions
