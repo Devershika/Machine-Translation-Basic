@@ -40,3 +40,9 @@ Machine Translation (MT) refers to the use of computational models and algorithm
 * Attention Mechanism: Helps models focus on relevant parts of the input sequence.
 * Transformers: Current state-of-the-art architecture for MT.
 
+## Evaluation Metrics
+
+* BLEU (Bilingual Evaluation Understudy) – measures n-gram overlap.
+* METEOR – considers synonyms and stemming.
+* TER (Translation Edit Rate) – measures edits required.
+* ChrF++ – character-based F-score for morphologically rich languages.
