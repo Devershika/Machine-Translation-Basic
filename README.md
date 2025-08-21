@@ -30,3 +30,13 @@ Machine Translation (MT) refers to the use of computational models and algorithm
 * Examples: Google Translate (modern version), OpenNMT, MarianNMT, HuggingFace Transformers.
 * Advantage: Produces fluent, context-aware translations.
 * Limitation: Requires large datasets and high computational power.
+
+## Core Concepts in MT
+
+* Parallel Corpus: Aligned bilingual text data used for training.
+* Alignment Models: Map words/phrases in the source to the target language.
+* Language Model (LM): Ensures fluency in the target language.
+* Encoder-Decoder Architecture: NMT framework for handling variable-length sequences.
+* Attention Mechanism: Helps models focus on relevant parts of the input sequence.
+* Transformers: Current state-of-the-art architecture for MT.
+
