@@ -33,3 +33,17 @@ def tokenize(text):
 df['en.tokens'] = df['translation.en'].apply(tokenize)
 df['hi.tokens'] = df['translation.hi'].apply(tokenize)
 
+from typing import Counter
+def build_vocab(tokens):
+  counter = Counter()
+  for token in tokens:
+    counter.update(token)
+  vocab = {'<pad>':0,'<sos>':1,'<eos>':2,'<unk>':3}
+  for word in counter:
+    vocab[word] = len(vocab)
+  return vocab
+
+eng_vocab = build_vocab(df['en.tokens'])
+hin_vocab = build_vocab(df['hi.tokens'])
+
+len(eng_vocab),len(hin_vocab)
