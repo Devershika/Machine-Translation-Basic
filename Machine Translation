@@ -1,1 +1,15 @@
+#Libraries
+!pip install fsspec==2023.9.2 sacrebleu evaluate rouge_score -qq
 
+import pandas as pd
+import numpy as np
+import transformers
+import torch
+import evaluate
+import sacrebleu
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import Dataset, DataLoader
+from datasets import load_dataset
+
+ds = load_dataset("cfilt/iitb-english-hindi")
