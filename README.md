@@ -46,3 +46,11 @@ Machine Translation (MT) refers to the use of computational models and algorithm
 * METEOR – considers synonyms and stemming.
 * TER (Translation Edit Rate) – measures edits required.
 * ChrF++ – character-based F-score for morphologically rich languages.
+
+## Applications
+
+* Global communication (Google Translate, DeepL).
+* International business and e-commerce.
+* Cross-lingual information retrieval.
+* Healthcare and government translation services.
+* Real-time speech translation (Zoom, Skype, Microsoft Translator).
