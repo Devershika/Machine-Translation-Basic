@@ -22,3 +22,42 @@ sentences = [
 
 for s in sentences:
     translate_sentence(s)
+
+##### Part B: Custom Dataset Translation
+import pandas as pd
+
+# Load translation model (English → French example)
+translator = pipeline("translation_en_to_fr", model="Helsinki-NLP/opus-mt-en-fr")
+
+#Create a small dataset (10 English sentences)
+source_sentences = [
+    "Good morning, have a nice day!",
+    "I am learning machine learning.",
+    "The weather is beautiful today.",
+    "Can you help me with this problem?",
+    "Artificial Intelligence is the future.",
+    "I enjoy reading books in my free time.",
+    "This food tastes delicious.",
+    "Where is the nearest railway station?",
+    "We are preparing for the final exams.",
+    "Thank you very much for your support."
+]
+
+#  Translate sentences
+translated_sentences = []
+for sentence in source_sentences:
+    result = translator(sentence, max_length=50)
+    translated_text = result[0]['translation_text']
+    translated_sentences.append(translated_text)
+
+#  Save results in CSV
+df = pd.DataFrame({
+    "Source Sentence": source_sentences,
+    "Translated Sentence": translated_sentences
+})
+
+# Save to file
+df.to_csv("translations.csv", index=False)
+
+print("Translations saved to 'translations.csv'")
+print(df)
