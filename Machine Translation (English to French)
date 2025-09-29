@@ -61,3 +61,35 @@ df.to_csv("translations.csv", index=False)
 
 print("Translations saved to 'translations.csv'")
 print(df)
+
+##### Part C: Model Performance Evaluation
+from nltk.translate.bleu_score import sentence_bleu, corpus_bleu
+
+reference_translations = [
+    ["Bonjour, passe une bonne journée !"],
+    ["J'apprends l'apprentissage automatique."],
+    ["Le temps est magnifique aujourd'hui."],
+    ["Peux-tu m'aider avec ce problème ?"],
+    ["L'intelligence artificielle est l'avenir."],
+    ["J'aime lire des livres pendant mon temps libre."],
+    ["Cette nourriture est délicieuse."],
+    ["Où est la gare la plus proche ?"],
+    ["Nous nous préparons pour les examens finaux."],
+    ["Merci beaucoup pour ton soutien."]
+]
+
+# Model translations (from Part B)
+model_translations = translated_sentences
+
+# Tokenize for BLEU
+references = [[ref[0].split()] for ref in reference_translations]  # list of lists of tokens
+candidates = [mt.split() for mt in model_translations]
+
+# Compute BLEU score
+corpus_score = corpus_bleu(references, candidates)
+
+# Print results
+print("BLEU Score:", corpus_score)
+for i, (ref, cand) in enumerate(zip(reference_translations, model_translations)):
+    sentence_score = sentence_bleu([ref[0].split()], cand.split())
+    print(f"Sentence {i+1} BLEU: {sentence_score:.4f}")
