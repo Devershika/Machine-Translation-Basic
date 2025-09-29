@@ -1,0 +1,24 @@
+##### Part A: Setting Up Machine Translation Model
+from transformers import pipeline
+# Load pre-trained translation model (English → French as example)
+translator = pipeline("translation_en_to_fr", model="Helsinki-NLP/opus-mt-en-fr")
+
+# Function to translate a sentence
+def translate_sentence(sentence):
+    result = translator(sentence, max_length=40)
+    translated_text = result[0]['translation_text']
+    print(f"Original: {sentence}")
+    print(f"Translated: {translated_text}\n")
+    return translated_text
+
+# Test the function with at least five sentences
+sentences = [
+    "Hello, how are you?",
+    "I am studying artificial intelligence.",
+    "What is your name?",
+    "This project is very interesting.",
+    "We are learning machine translation using Hugging Face."
+]
+
+for s in sentences:
+    translate_sentence(s)
